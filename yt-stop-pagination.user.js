@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Channel Videos - Stop Pagination Load
-// @namespace    http://tampermonkey.net/
-// @version      1.0
+// @namespace    https://violentmonkey.github.io/
+// @version      2026-05-09
 // @description  Stop infinite pagination loading on YouTube channel video pages
 // @match        https://www.youtube.com/*
 // @run-at       document-start

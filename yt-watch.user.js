@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Watch - Restore Hidden Controls
-// @namespace    http://tampermonkey.net/
-// @version      1.0
+// @namespace    https://violentmonkey.github.io/
+// @version      2026-05-09
 // @description  Restore fullscreen quick actions on YouTube watch pages
 // @match        https://www.youtube.com/watch*
 // @run-at       document-idle
