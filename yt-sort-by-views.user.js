@@ -3,6 +3,10 @@
 // @namespace    https://violentmonkey.github.io/
 // @version      2026-05-09
 // @description  Add a "Most Viewed" button to YouTube channel video pages
+// @homepageURL  https://github.com/100nandoo/monkey-business
+// @supportURL   https://github.com/100nandoo/monkey-business/issues
+// @icon         https://raw.githubusercontent.com/100nandoo/monkey-business/main/assets/monkey_business.png
+// @downloadURL  https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-sort-by-views.user.js
 // @match        https://www.youtube.com/*
 // @run-at       document-idle
 // @grant        none

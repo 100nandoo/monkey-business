@@ -3,6 +3,10 @@
 // @namespace    https://violentmonkey.github.io/
 // @version      2026-05-09
 // @description  Restore fullscreen quick actions on YouTube watch pages
+// @homepageURL  https://github.com/100nandoo/monkey-business
+// @supportURL   https://github.com/100nandoo/monkey-business/issues
+// @icon         https://raw.githubusercontent.com/100nandoo/monkey-business/main/assets/monkey_business.png
+// @downloadURL  https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-watch.user.js
 // @match        https://www.youtube.com/watch*
 // @run-at       document-idle
 // @grant        none
