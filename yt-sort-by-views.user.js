@@ -6,7 +6,7 @@
 // @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
-// @icon         https://raw.githubusercontent.com/100nandoo/monkey-business/main/assets/monkey_business.png
+// @icon         https://www.youtube.com/favicon.ico
 // @downloadURL  https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-sort-by-views.user.js
 // @match        https://www.youtube.com/*
 // @run-at       document-idle

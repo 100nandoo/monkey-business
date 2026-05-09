@@ -6,7 +6,7 @@
 // @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
-// @icon         https://raw.githubusercontent.com/100nandoo/monkey-business/main/assets/monkey_business.png
+// @icon         https://activesg.gov.sg/favicon.ico
 // @downloadURL  https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js
 // @match        https://activesg.gov.sg/gym-pool-crowd*
 // @run-at       document-idle
