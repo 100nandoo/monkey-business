@@ -3,6 +3,7 @@
 // @namespace    https://violentmonkey.github.io/
 // @version      2026-05-09
 // @description  Stop infinite pagination loading on YouTube channel video pages
+// @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
 // @icon         https://raw.githubusercontent.com/100nandoo/monkey-business/main/assets/monkey_business.png
