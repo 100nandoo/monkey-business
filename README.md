@@ -9,7 +9,7 @@ Small userscripts for smoothing out a few website UX issues.
 - `yt-sort-by-views.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-sort-by-views.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds a `Most Viewed` button on YouTube channel `/videos` pages and reorders loaded videos by parsed view count.
 - `yt-stop-pagination.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-stop-pagination.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>stops YouTube from loading more channel videos through the continuation spinner / infinite scroll on `/videos` pages.
 - `yt-watch.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-watch.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>restores hidden fullscreen quick actions on YouTube watch pages.
-- `activesg-gym-pool-crowd-filter.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>shows only the configured gyms or pools on the ActiveSG `Gym and pool crowd` page.
+- `activesg-gym-pool-crowd-filter.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds an `Apply Preset` button and `Auto Fill` toggle for the configured gym or pool on the ActiveSG `Gym and pool crowd` page.
 
 ## Install
 
@@ -18,7 +18,7 @@ Small userscripts for smoothing out a few website UX issues.
 3. Let the userscript manager install it.
 4. Refresh the matching YouTube page.
 
-For the ActiveSG script, edit `VISIBLE_VENUES` near the top of the userscript to choose which gym or pool names stay visible.
+For the ActiveSG script, edit `VISIBLE_VENUES` near the top of the userscript to choose which gym or pool names the controls will fill into the search box.
 
 If you want the `Most Viewed` script to work against only the currently loaded set of channel videos, install just `yt-sort-by-views.user.js`.
 

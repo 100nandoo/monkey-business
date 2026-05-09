@@ -2,7 +2,7 @@
 // @name         ActiveSG Gym/Pool Crowd Filter
 // @namespace    https://violentmonkey.github.io/
 // @version      2026-05-09
-// @description  Autofill the selected gym or pool name into the ActiveSG crowd page search box
+// @description  Add controls to apply the selected gym or pool preset into the ActiveSG crowd page search box
 // @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
@@ -22,14 +22,21 @@ const VISIBLE_VENUES = {
     'use strict';
 
     const TAB_LABELS = ['gym', 'pool'];
+    const STYLE_ID = 'vm-activesg-filter-style';
+    const CONTROLS_ID = 'vm-activesg-filter-controls';
+    const AUTO_TOGGLE_KEY = 'vm-activesg-filter-auto-apply';
     let refreshTimer = 0;
-    const userOverrideByTab = {
-        gym: false,
-        pool: false,
-    };
 
     function normalizeText(value) {
         return (value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    }
+
+    function isAutoApplyEnabled() {
+        return window.localStorage.getItem(AUTO_TOGGLE_KEY) === 'true';
+    }
+
+    function setAutoApplyEnabled(enabled) {
+        window.localStorage.setItem(AUTO_TOGGLE_KEY, enabled ? 'true' : 'false');
     }
 
     function getActiveTabName() {
@@ -59,22 +66,69 @@ const VISIBLE_VENUES = {
         }) || null;
     }
 
+    function getControlsMount() {
+        const input = getSearchInput();
+        if (!(input instanceof HTMLElement)) return null;
+
+        return input.parentElement;
+    }
+
+    function injectStyles() {
+        if (document.getElementById(STYLE_ID)) return;
+
+        const style = document.createElement('style');
+        style.id = STYLE_ID;
+        style.textContent = `
+            #${CONTROLS_ID} {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 0 0 12px;
+                flex-wrap: wrap;
+            }
+
+            #${CONTROLS_ID} button,
+            #${CONTROLS_ID} label {
+                font: 500 13px/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            }
+
+            #${CONTROLS_ID} button {
+                border: 1px solid rgba(0, 0, 0, 0.14);
+                border-radius: 999px;
+                background: #fff;
+                color: #111827;
+                padding: 8px 12px;
+                cursor: pointer;
+            }
+
+            #${CONTROLS_ID} button:hover {
+                background: #f3f4f6;
+            }
+
+            #${CONTROLS_ID} label {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                color: #374151;
+            }
+
+            #${CONTROLS_ID} input[type="checkbox"] {
+                margin: 0;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     function setNativeValue(input, value) {
         const prototype = Object.getPrototypeOf(input);
         const descriptor = Object.getOwnPropertyDescriptor(prototype, 'value');
         descriptor?.set?.call(input, value);
     }
 
-    function markUserOverride() {
-        const activeTab = getActiveTabName();
-        userOverrideByTab[activeTab] = true;
-    }
-
     function applySearchValue() {
         const activeTab = getActiveTabName();
         const desiredValue = typeof VISIBLE_VENUES?.[activeTab] === 'string' ? VISIBLE_VENUES[activeTab].trim() : '';
         if (!desiredValue) return;
-        if (userOverrideByTab[activeTab]) return;
 
         const input = getSearchInput();
         if (!(input instanceof HTMLInputElement)) return;
@@ -86,31 +140,77 @@ const VISIBLE_VENUES = {
         input.dispatchEvent(new Event('change', { bubbles: true }));
     }
 
-    function scheduleApply() {
+    function updateControlsState() {
+        const autoToggle = document.getElementById('vm-activesg-auto-toggle');
+        if (autoToggle instanceof HTMLInputElement) {
+            autoToggle.checked = isAutoApplyEnabled();
+        }
+    }
+
+    function ensureControls() {
+        injectStyles();
+
+        const mount = getControlsMount();
+        if (!(mount instanceof HTMLElement)) return;
+
+        let controls = document.getElementById(CONTROLS_ID);
+        if (!(controls instanceof HTMLElement)) {
+            controls = document.createElement('div');
+            controls.id = CONTROLS_ID;
+            controls.innerHTML = `
+                <button type="button" id="vm-activesg-apply-button">Apply Preset</button>
+                <label for="vm-activesg-auto-toggle">
+                    <input type="checkbox" id="vm-activesg-auto-toggle">
+                    Auto Fill
+                </label>
+            `;
+        }
+
+        if (controls.parentElement !== mount) {
+            mount.parentElement?.insertBefore(controls, mount);
+        }
+
+        const applyButton = document.getElementById('vm-activesg-apply-button');
+        if (applyButton && !applyButton.dataset.vmBound) {
+            applyButton.addEventListener('click', () => {
+                applySearchValue();
+            });
+            applyButton.dataset.vmBound = 'true';
+        }
+
+        const autoToggle = document.getElementById('vm-activesg-auto-toggle');
+        if (autoToggle instanceof HTMLInputElement && !autoToggle.dataset.vmBound) {
+            autoToggle.addEventListener('change', () => {
+                setAutoApplyEnabled(autoToggle.checked);
+                if (autoToggle.checked) {
+                    applySearchValue();
+                }
+            });
+            autoToggle.dataset.vmBound = 'true';
+        }
+
+        updateControlsState();
+    }
+
+    function refreshUi() {
+        ensureControls();
+
+        if (isAutoApplyEnabled()) {
+            applySearchValue();
+        }
+    }
+
+    function scheduleRefresh() {
         window.clearTimeout(refreshTimer);
-        refreshTimer = window.setTimeout(applySearchValue, 150);
+        refreshTimer = window.setTimeout(refreshUi, 150);
     }
 
     const observer = new MutationObserver(() => {
-        scheduleApply();
+        scheduleRefresh();
     });
 
-    window.addEventListener('load', scheduleApply);
-    document.addEventListener('click', scheduleApply, true);
-    document.addEventListener('input', (event) => {
-        if (!event.isTrusted) return;
-        const input = getSearchInput();
-        if (event.target === input) {
-            markUserOverride();
-        }
-    }, true);
-    document.addEventListener('change', (event) => {
-        if (!event.isTrusted) return;
-        const input = getSearchInput();
-        if (event.target === input) {
-            markUserOverride();
-        }
-    }, true);
+    window.addEventListener('load', scheduleRefresh);
+    document.addEventListener('click', scheduleRefresh, true);
     observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true });
-    scheduleApply();
+    scheduleRefresh();
 })();
