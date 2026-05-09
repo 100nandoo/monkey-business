@@ -6,9 +6,9 @@ Small userscripts for smoothing out a few YouTube UX issues.
 
 ## Scripts
 
-- `yt-sort-by-views.user.js`: adds a `Most Viewed` button on YouTube channel `/videos` pages and reorders loaded videos by parsed view count.
-- `yt-stop-pagination.user.js`: stops YouTube from loading more channel videos through the continuation spinner / infinite scroll on `/videos` pages.
-- `yt-watch.user.js`: restores hidden fullscreen quick actions on YouTube watch pages.
+- `yt-sort-by-views.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-sort-by-views.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds a `Most Viewed` button on YouTube channel `/videos` pages and reorders loaded videos by parsed view count.
+- `yt-stop-pagination.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-stop-pagination.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>stops YouTube from loading more channel videos through the continuation spinner / infinite scroll on `/videos` pages.
+- `yt-watch.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-watch.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>restores hidden fullscreen quick actions on YouTube watch pages.
 
 ## Install
 
