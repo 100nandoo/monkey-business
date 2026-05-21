@@ -10,15 +10,18 @@ Small userscripts for smoothing out a few website UX issues.
 - `yt-stop-pagination.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-stop-pagination.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>stops YouTube from loading more channel videos through the continuation spinner / infinite scroll on `/videos` pages.
 - `yt-watch.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-watch.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>restores hidden fullscreen quick actions on YouTube watch pages.
 - `activesg-gym-pool-crowd-filter.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds an `Apply Preset` button and `Auto Fill` toggle for the configured gym or pool on the ActiveSG `Gym and pool crowd` page.
+- `adv-sleep-timer.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/adv-sleep-timer.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds `Command+Shift+1`, `Command+Shift+2`, and `Command+Shift+3` shortcuts to set the Audiobookshelf sleep timer to 1, 2, or 3 minutes.
 
 ## Install
 
 1. Install a userscript manager such as [Violentmonkey](https://violentmonkey.github.io/).
 2. Open the raw contents of any `*.user.js` file in this repository.
 3. Let the userscript manager install it.
-4. Refresh the matching YouTube page.
+4. Refresh the matching site page.
 
 For the ActiveSG script, edit `VISIBLE_VENUES` near the top of the userscript to choose which gym or pool names the controls will fill into the search box.
+
+For the Audiobookshelf script, update the `@match` URL near the top of the userscript if your Audiobookshelf instance is hosted at a different address.
 
 If you want the `Most Viewed` script to work against only the currently loaded set of channel videos, install just `yt-sort-by-views.user.js`.
 
@@ -28,6 +31,7 @@ If you also want YouTube to stop fetching more items before sorting, install `yt
 
 - These scripts target the current YouTube DOM and may need updates if YouTube changes its markup or navigation events.
 - The ActiveSG script targets the current `Gym and pool crowd` DOM and may need updates if ActiveSG changes its markup.
+- The Audiobookshelf script targets the current player and sleep timer modal DOM and may need updates if Audiobookshelf changes those controls.
 - View sorting only applies to videos already present in the DOM.
 - The sort script supports abbreviated counts like `K`, `M`, and `B`.
 - All scripts are plain browser userscripts with `@grant none`.
@@ -38,4 +42,4 @@ If you also want YouTube to stop fetching more items before sorting, install `yt
 
 ## Development
 
-There is no build step. Edit the userscripts directly and reload them in your userscript manager while testing on YouTube.
+There is no build step. Edit the userscripts directly and reload them in your userscript manager while testing on the matching site.
