@@ -10,7 +10,7 @@ Small userscripts for smoothing out a few website UX issues.
 - `yt-stop-pagination.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-stop-pagination.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>stops YouTube from loading more channel videos through the continuation spinner / infinite scroll on `/videos` pages.
 - `yt-watch.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-watch.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>restores hidden fullscreen quick actions on YouTube watch pages.
 - `activesg-gym-pool-crowd-filter.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds an `Apply Preset` button and `Auto Fill` toggle for the configured gym or pool on the ActiveSG `Gym and pool crowd` page.
-- `adv-sleep-timer.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/adv-sleep-timer.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds `Command+Shift+1`, `Command+Shift+2`, and `Command+Shift+3` shortcuts to set the Audiobookshelf sleep timer to 1, 2, or 3 minutes.
+- `adv-sleep-timer.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/adv-sleep-timer.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds `1`, `2`, and `3` shortcuts to set the Audiobookshelf sleep timer to 1, 2, or 3 minutes from Audiobookshelf library, item, and podcast pages whenever the player is open.
 
 ## Install
 

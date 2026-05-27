@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Audiobookshelf Quick Sleep Timers
 // @namespace    https://violentmonkey.github.io/
-// @version      2026-05-21
-// @description  Press Command+Shift+1/2/3 to set the Audiobookshelf sleep timer to 1, 2, or 3 minutes.
+// @version      2026-05-27
+// @description  Press 1, 2, or 3 to set the Audiobookshelf sleep timer to 1, 2, or 3 minutes from library, item, and podcast pages when the player is open.
 // @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
@@ -34,11 +34,11 @@
     if (element.isContentEditable) return true;
 
     const tagName = element.tagName ? element.tagName.toLowerCase() : '';
-    return ['input', 'textarea', 'select', 'button'].includes(tagName);
+    return ['input', 'textarea', 'select'].includes(tagName);
   }
 
   function getShortcutMinutes(event) {
-    if (event.ctrlKey || event.altKey || !event.shiftKey || !event.metaKey) {
+    if (event.ctrlKey || event.altKey || event.shiftKey || event.metaKey) {
       return null;
     }
 
