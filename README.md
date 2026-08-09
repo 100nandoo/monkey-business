@@ -9,7 +9,7 @@ Small userscripts for smoothing out a few website UX issues.
 - `yt-sort-by-views.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-sort-by-views.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds a `Most Viewed` button on YouTube channel `/videos` pages and reorders loaded videos by parsed view count.
 - `yt-stop-pagination.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-stop-pagination.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>stops YouTube from loading more channel videos through the continuation spinner / infinite scroll on `/videos` pages.
 - `yt-watch.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/yt-watch.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>restores hidden fullscreen quick actions on YouTube watch pages.
-- `activesg-gym-pool-crowd-filter.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds an `Apply Preset` button and `Auto Fill` toggle for the configured gym or pool on the ActiveSG `Gym and pool crowd` page.
+- `activesg-gym-pool-crowd-filter.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/activesg-gym-pool-crowd-filter.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds an `Apply Filter` toggle for the configured gym or pool venues on the ActiveSG `Gym and pool crowd` page.
 - `adv-sleep-timer.user.js` <a href="https://raw.githubusercontent.com/100nandoo/monkey-business/main/adv-sleep-timer.user.js" target="_blank" rel="noopener noreferrer">Install</a><br>adds `1`, `2`, and `3` shortcuts to set the Audiobookshelf sleep timer to 1, 2, or 3 minutes from Audiobookshelf library, item, and podcast pages whenever the player is open.
 
 ## Install
@@ -19,7 +19,7 @@ Small userscripts for smoothing out a few website UX issues.
 3. Let the userscript manager install it.
 4. Refresh the matching site page.
 
-For the ActiveSG script, edit `VISIBLE_VENUES` near the top of the userscript to choose which gym or pool names the controls will fill into the search box.
+For the ActiveSG script, edit `VISIBLE_VENUES` near the top of the userscript to choose which gym or pool names should remain visible. Each tab accepts either a single string, a comma-separated string, or an array of venue names.
 
 For the Audiobookshelf script, update the `@match` URL near the top of the userscript if your Audiobookshelf instance is hosted at a different address.
 

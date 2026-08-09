@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         ActiveSG Gym/Pool Crowd Filter
 // @namespace    https://violentmonkey.github.io/
-// @version      2026-05-09
-// @description  Add controls to apply the selected gym or pool preset into the ActiveSG crowd page search box
+// @version      2026-08-09
+// @description  Add controls to filter the ActiveSG crowd page down to the selected gym or pool venues
 // @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
@@ -14,8 +14,8 @@
 // ==/UserScript==
 
 const VISIBLE_VENUES = {
-    gym: 'Delta ActiveSG Gym',
-    pool: '',
+    gym: ['Delta ActiveSG Gym', 'Queenstown ActiveSG Gym'],
+    pool: [],
 };
 
 (function () {
@@ -24,19 +24,19 @@ const VISIBLE_VENUES = {
     const TAB_LABELS = ['gym', 'pool'];
     const STYLE_ID = 'vm-activesg-filter-style';
     const CONTROLS_ID = 'vm-activesg-filter-controls';
-    const AUTO_TOGGLE_KEY = 'vm-activesg-filter-auto-apply';
+    const FILTER_TOGGLE_KEY = 'vm-activesg-filter-enabled';
     let refreshTimer = 0;
 
     function normalizeText(value) {
         return (value || '').replace(/\s+/g, ' ').trim().toLowerCase();
     }
 
-    function isAutoApplyEnabled() {
-        return window.localStorage.getItem(AUTO_TOGGLE_KEY) === 'true';
+    function isFilterEnabled() {
+        return window.localStorage.getItem(FILTER_TOGGLE_KEY) === 'true';
     }
 
-    function setAutoApplyEnabled(enabled) {
-        window.localStorage.setItem(AUTO_TOGGLE_KEY, enabled ? 'true' : 'false');
+    function setFilterEnabled(enabled) {
+        window.localStorage.setItem(FILTER_TOGGLE_KEY, enabled ? 'true' : 'false');
     }
 
     function getActiveTabName() {
@@ -119,31 +119,90 @@ const VISIBLE_VENUES = {
         document.head.appendChild(style);
     }
 
-    function setNativeValue(input, value) {
-        const prototype = Object.getPrototypeOf(input);
-        const descriptor = Object.getOwnPropertyDescriptor(prototype, 'value');
-        descriptor?.set?.call(input, value);
+    function getDesiredVenueNames() {
+        const activeTab = getActiveTabName();
+        const configuredValue = VISIBLE_VENUES?.[activeTab];
+
+        if (Array.isArray(configuredValue)) {
+            return configuredValue.map(normalizeText).filter(Boolean);
+        }
+
+        if (typeof configuredValue === 'string') {
+            return configuredValue
+                .split(',')
+                .map(normalizeText)
+                .filter(Boolean);
+        }
+
+        return [];
     }
 
-    function applySearchValue() {
-        const activeTab = getActiveTabName();
-        const desiredValue = typeof VISIBLE_VENUES?.[activeTab] === 'string' ? VISIBLE_VENUES[activeTab].trim() : '';
-        if (!desiredValue) return;
-
+    function getVenueListContainer() {
         const input = getSearchInput();
-        if (!(input instanceof HTMLInputElement)) return;
-        if (input.value === desiredValue) return;
+        if (!(input instanceof HTMLElement)) return null;
 
-        input.focus();
-        setNativeValue(input, desiredValue);
-        input.dispatchEvent(new InputEvent('input', { bubbles: true, data: desiredValue, inputType: 'insertText' }));
-        input.dispatchEvent(new Event('change', { bubbles: true }));
+        let container = input.parentElement;
+
+        while (container && container !== document.body) {
+            const matchingChildren = Array.from(container.children).filter((child) => {
+                return normalizeText(child.textContent).includes('% full');
+            });
+
+            if (matchingChildren.length >= 2) {
+                return container;
+            }
+
+            container = container.parentElement;
+        }
+
+        return null;
+    }
+
+    function getVenueCards() {
+        const container = getVenueListContainer();
+        if (!(container instanceof HTMLElement)) return [];
+
+        return Array.from(container.children).filter((child) => {
+            if (!(child instanceof HTMLElement)) return false;
+            return normalizeText(child.textContent).includes('% full');
+        });
+    }
+
+    function getVenueCardName(card) {
+        const title = card.querySelector('p');
+        return normalizeText(title?.textContent);
+    }
+
+    function applyVenueFilter() {
+        const desiredVenueNames = getDesiredVenueNames();
+        const cards = getVenueCards();
+
+        if (!cards.length) return;
+
+        for (const card of cards) {
+            const venueName = getVenueCardName(card);
+            const shouldShow =
+                !desiredVenueNames.length ||
+                desiredVenueNames.some((desiredVenueName) => {
+                    return venueName === desiredVenueName || venueName.includes(desiredVenueName);
+                });
+
+            card.style.display = shouldShow ? '' : 'none';
+        }
+    }
+
+    function resetVenueFilter() {
+        const cards = getVenueCards();
+
+        for (const card of cards) {
+            card.style.display = '';
+        }
     }
 
     function updateControlsState() {
-        const autoToggle = document.getElementById('vm-activesg-auto-toggle');
-        if (autoToggle instanceof HTMLInputElement) {
-            autoToggle.checked = isAutoApplyEnabled();
+        const filterToggle = document.getElementById('vm-activesg-filter-toggle');
+        if (filterToggle instanceof HTMLInputElement) {
+            filterToggle.checked = isFilterEnabled();
         }
     }
 
@@ -158,10 +217,9 @@ const VISIBLE_VENUES = {
             controls = document.createElement('div');
             controls.id = CONTROLS_ID;
             controls.innerHTML = `
-                <button type="button" id="vm-activesg-apply-button">Apply Preset</button>
-                <label for="vm-activesg-auto-toggle">
-                    <input type="checkbox" id="vm-activesg-auto-toggle">
-                    Auto Fill
+                <label for="vm-activesg-filter-toggle">
+                    <input type="checkbox" id="vm-activesg-filter-toggle">
+                    Apply Filter
                 </label>
             `;
         }
@@ -170,23 +228,17 @@ const VISIBLE_VENUES = {
             mount.parentElement?.insertBefore(controls, mount);
         }
 
-        const applyButton = document.getElementById('vm-activesg-apply-button');
-        if (applyButton && !applyButton.dataset.vmBound) {
-            applyButton.addEventListener('click', () => {
-                applySearchValue();
-            });
-            applyButton.dataset.vmBound = 'true';
-        }
-
-        const autoToggle = document.getElementById('vm-activesg-auto-toggle');
-        if (autoToggle instanceof HTMLInputElement && !autoToggle.dataset.vmBound) {
-            autoToggle.addEventListener('change', () => {
-                setAutoApplyEnabled(autoToggle.checked);
-                if (autoToggle.checked) {
-                    applySearchValue();
+        const filterToggle = document.getElementById('vm-activesg-filter-toggle');
+        if (filterToggle instanceof HTMLInputElement && !filterToggle.dataset.vmBound) {
+            filterToggle.addEventListener('change', () => {
+                setFilterEnabled(filterToggle.checked);
+                if (filterToggle.checked) {
+                    applyVenueFilter();
+                } else {
+                    resetVenueFilter();
                 }
             });
-            autoToggle.dataset.vmBound = 'true';
+            filterToggle.dataset.vmBound = 'true';
         }
 
         updateControlsState();
@@ -195,9 +247,12 @@ const VISIBLE_VENUES = {
     function refreshUi() {
         ensureControls();
 
-        if (isAutoApplyEnabled()) {
-            applySearchValue();
+        if (isFilterEnabled()) {
+            applyVenueFilter();
+            return;
         }
+
+        resetVenueFilter();
     }
 
     function scheduleRefresh() {
