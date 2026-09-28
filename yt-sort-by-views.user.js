@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         YouTube Channel Videos - Most Viewed Button
 // @namespace    https://violentmonkey.github.io/
-// @version      2026-05-09
-// @description  Add a "Most Viewed" button to YouTube channel video pages
+// @version      2026-09-28
+// @description  Add a "Most Viewed" button to sort loaded YouTube channel videos by view count
 // @author       100nandoo
 // @homepageURL  https://github.com/100nandoo/monkey-business
 // @supportURL   https://github.com/100nandoo/monkey-business/issues
@@ -91,7 +91,7 @@
     }
 
     function parseViews(text) {
-        const match = text?.match(/([\d.,]+)\s*([KMB])?\s+views?\b/i);
+        const match = text?.match(/^\s*([\d.,]+)\s*([KMB])?\s*(?:views?)?\s*$/i);
         if (!match) return 0;
 
         const [, rawNumber, rawSuffix = ''] = match;
@@ -190,11 +190,11 @@
                 '.ytContentMetadataViewModelMetadataText',
             ].join(', ')
         );
-        const viewText = Array.from(metadataNodes)
-            .map((node) => (node.textContent || '').trim())
-            .find((text) => /\bviews?\b/i.test(text));
+        const viewCount = Array.from(metadataNodes)
+            .map((node) => parseViews((node.textContent || '').trim()))
+            .find((count) => count > 0);
 
-        return parseViews(viewText);
+        return viewCount ?? 0;
     }
 
     function getItemsPerRow(grid) {
